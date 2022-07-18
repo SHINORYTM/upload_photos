@@ -1,0 +1,28 @@
+<div>
+  <%= render 'layouts/logout' %>
+
+  <%= render 'layouts/title', title: '写真一覧' %>
+
+  <div><%= link_to "MyTweetAppと連携", auth_uri %></div>
+
+  <div><%= link_to "アップロード", controller: "photos", action: "new" %></div>
+</div>
+
+<div style="margin-top: 10px;">
+  <% @photos.each do |photo| %>
+    <div style="display: inline-block; margin-right: 10px;">
+      <div style="text-align: center;"><%= photo.title %></div>
+      <div><%= image_tag photo.filename, width: 200, height: 200 %></div>
+
+      <% if @oauth_token_presence %>
+        <div style="text-align: center;">
+          <%= form_with locale: true, url: oauth_tweet_path do |form| %>
+            <input type="hidden" name="title" value=<%= photo.title %>>
+            <input type="hidden" name="url" value=<%= image_uri(photo) %>>
+            <input type="submit" value="ツイート">
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
